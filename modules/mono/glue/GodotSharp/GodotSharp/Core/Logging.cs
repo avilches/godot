@@ -10,10 +10,12 @@ namespace Godot;
 /// </summary>
 public static class Logging
 {
-    public static event Action<Exception>? UnhandledExceptionReporter;
+    public static event Action<Exception>? UserExceptionReporter;
 
-    internal static void InvokeUnhandledExceptionReporter(Exception e)
+    public static bool SendToScriptDebugger { get; set; } = true;
+
+    internal static void InvokeUserExceptionReporter(Exception e)
     {
-        UnhandledExceptionReporter?.Invoke(e);
+        UserExceptionReporter?.Invoke(e);
     }
 }
