@@ -137,7 +137,7 @@ public:
 					return arguments[0] < p_method.arguments[0];
 				}
 			}
-			return name < p_method.name;
+			return name.naturalcasecmp_to(p_method.name) < 0;
 		}
 		static MethodDoc from_dict(const Dictionary &p_dict) {
 			MethodDoc doc;
@@ -315,61 +315,6 @@ public:
 		}
 	};
 
-	struct EnumDoc {
-		String name = "@unnamed_enum";
-		bool is_bitfield = false;
-		String description;
-		Vector<DocData::ConstantDoc> values;
-		static EnumDoc from_dict(const Dictionary &p_dict) {
-			EnumDoc doc;
-
-			if (p_dict.has("name")) {
-				doc.name = p_dict["name"];
-			}
-
-			if (p_dict.has("is_bitfield")) {
-				doc.is_bitfield = p_dict["is_bitfield"];
-			}
-
-			if (p_dict.has("description")) {
-				doc.description = p_dict["description"];
-			}
-
-			Array values;
-			if (p_dict.has("values")) {
-				values = p_dict["values"];
-			}
-			for (int i = 0; i < values.size(); i++) {
-				doc.values.push_back(ConstantDoc::from_dict(values[i]));
-			}
-
-			return doc;
-		}
-		static Dictionary to_dict(const EnumDoc &p_doc) {
-			Dictionary dict;
-
-			if (!p_doc.name.is_empty()) {
-				dict["name"] = p_doc.name;
-			}
-
-			dict["is_bitfield"] = p_doc.is_bitfield;
-
-			if (!p_doc.description.is_empty()) {
-				dict["description"] = p_doc.description;
-			}
-
-			if (!p_doc.values.is_empty()) {
-				Array values;
-				for (int i = 0; i < p_doc.values.size(); i++) {
-					values.push_back(ConstantDoc::to_dict(p_doc.values[i]));
-				}
-				dict["values"] = values;
-			}
-
-			return dict;
-		}
-	};
-
 	struct PropertyDoc {
 		String name;
 		String type;
@@ -382,7 +327,7 @@ public:
 		bool is_deprecated = false;
 		bool is_experimental = false;
 		bool operator<(const PropertyDoc &p_prop) const {
-			return name < p_prop.name;
+			return name.naturalcasecmp_to(p_prop.name) < 0;
 		}
 		static PropertyDoc from_dict(const Dictionary &p_dict) {
 			PropertyDoc doc;
@@ -487,7 +432,7 @@ public:
 		bool operator<(const ThemeItemDoc &p_theme_item) const {
 			// First sort by the data type, then by name.
 			if (data_type == p_theme_item.data_type) {
-				return name < p_theme_item.name;
+				return name.naturalcasecmp_to(p_theme_item.name) < 0;
 			}
 			return data_type < p_theme_item.data_type;
 		}

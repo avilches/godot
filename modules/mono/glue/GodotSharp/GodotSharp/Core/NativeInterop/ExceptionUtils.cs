@@ -103,12 +103,14 @@ namespace Godot.NativeInterop
         {
             try
             {
-                if (Logging.SendToScriptDebugger && NativeFuncs.godotsharp_internal_script_debugger_is_active())
+                if (NativeFuncs.godotsharp_internal_script_debugger_is_active().ToBool())
                 {
                     SendToScriptDebugger(e);
                 }
-
-                Logging.InvokeUserExceptionReporter(e);
+                else
+                {
+                    GD.PushError(e.ToString());
+                }
             }
             catch (Exception unexpected)
             {
@@ -120,10 +122,13 @@ namespace Godot.NativeInterop
         {
             try
             {
-                if (Logging.SendToScriptDebugger && NativeFuncs.godotsharp_internal_script_debugger_is_active())
+                if (NativeFuncs.godotsharp_internal_script_debugger_is_active().ToBool())
                 {
                     SendToScriptDebugger(e);
                 }
+
+                // In this case, print it as well in addition to sending it to the script debugger
+                GD.PushError("Unhandled exception\n" + e);
             }
             catch (Exception unexpected)
             {
