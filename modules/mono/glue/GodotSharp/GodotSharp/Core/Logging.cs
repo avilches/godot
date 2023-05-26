@@ -12,8 +12,6 @@ public static class Logging
 {
     public static event Action<Exception>? UserExceptionReporter;
 
-    public static bool SendToScriptDebugger { get; set; } = true;
-
     internal static void InvokeUserExceptionReporter(Exception e)
     {
         UserExceptionReporter?.Invoke(e);

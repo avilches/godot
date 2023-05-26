@@ -111,6 +111,8 @@ namespace Godot.NativeInterop
                 {
                     GD.PushError(e.ToString());
                 }
+
+                Logging.InvokeUserExceptionReporter(e);
             }
             catch (Exception unexpected)
             {
@@ -129,6 +131,9 @@ namespace Godot.NativeInterop
 
                 // In this case, print it as well in addition to sending it to the script debugger
                 GD.PushError("Unhandled exception\n" + e);
+
+                Logging.InvokeUserExceptionReporter(e);
+
             }
             catch (Exception unexpected)
             {
